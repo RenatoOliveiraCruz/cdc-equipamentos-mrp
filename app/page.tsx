@@ -17,6 +17,7 @@ const statusOptions=['Aberto','Em análise','Aguardando material','Liberado','Em
 const fmt=(v:any)=>Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:2});
 export default function Home(){
  const [active,setActive]=useState<Mod>('dashboard'); const [rows,setRows]=useState<Rec[]>([]); const [loading,setLoading]=useState(true); const [error,setError]=useState(''); const [query,setQuery]=useState(''); const [form,setForm]=useState<Record<string,string>>({}); const [showForm,setShowForm]=useState(false); const [saving,setSaving]=useState(false); const [notice,setNotice]=useState('');
+<<<<<<< HEAD
  const demoRecords: Rec[] = [
  {id:'demo-v1',module:'sales',code:'PV-2026-001',title:'Pedido · Usina Santa Elisa',status:'Em análise',due_date:'2026-12-18',quantity:2,payload:{customer:'Usina Santa Elisa',productSku:'DEC-001',value:'185000',notes:'Demonstração — equipamento sob encomenda'}},
  {id:'demo-v2',module:'sales',code:'PV-2026-002',title:'Pedido · Agro Óleos Brasil',status:'Aberto',due_date:'2026-12-29',quantity:1,payload:{customer:'Agro Óleos Brasil',productSku:'DEC-001',value:'92000'}},
@@ -29,6 +30,9 @@ export default function Home(){
  {id:'demo-t1',module:'shipping',code:'EXP-2026-003',title:'Expedição · Peças reposição',status:'Em transporte',quantity:1,payload:{customer:'Agro Óleos Brasil',orderRef:'PV-2026-000',carrier:'Transportadora demonstração',tracking:'DEMO-123456',expected:'2026-11-30'}}
 ];
 async function load(){setLoading(true);setError(''); if(hasSupabase&&supabase){const {data,error}=await supabase.from('records').select('*').order('created_at',{ascending:false});if(error){setError(error.message)}else setRows((data||[]) as Rec[])}else{try{const saved=localStorage.getItem('cdc-mrp-demo');if(saved){setRows(JSON.parse(saved))}else{setRows(demoRecords);localStorage.setItem('cdc-mrp-demo',JSON.stringify(demoRecords))}}catch{setRows(demoRecords)}}setLoading(false)}
+=======
+ async function load(){setLoading(true);setError(''); if(hasSupabase&&supabase){const {data,error}=await supabase.from('records').select('*').order('created_at',{ascending:false});if(error){setError(error.message)}else setRows((data||[]) as Rec[])}else{try{const saved=localStorage.getItem('cdc-mrp-demo');setRows(saved?JSON.parse(saved):[])}catch{setRows([])}}setLoading(false)}
+>>>>>>> 063de9ead1412115134d15b061ef3e5fe480033d
  useEffect(()=>{load()},[]);
  const saveLocal=(next:Rec[])=>{setRows(next);if(!hasSupabase)localStorage.setItem('cdc-mrp-demo',JSON.stringify(next))};
  async function create(){const meta=modules.find(m=>m.id===active);if(!meta)return;for(const f of meta.fields){if(f.required&&!form[f.key]?.trim()){setNotice(`Preencha o campo: ${f.label}`);return}}
